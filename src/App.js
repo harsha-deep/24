@@ -8,11 +8,17 @@ const App = () => {
   const [tickets, setTickets] = useState([]);
   const [grouping, setGrouping] = useState('status');
   const [sorting, setSorting] = useState('priority');
+  const [userData, setUserData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchTickets();
-      setTickets(data);
+      try {
+        const data = await fetchTickets();
+        setTickets(data.tickets);
+        setUserData(data.users);
+      } catch (error) {
+        console.error('Error fetching tickets:', error);
+      }
     };
     fetchData();
   }, []);
@@ -25,7 +31,7 @@ const App = () => {
         sorting={sorting}
         setSorting={setSorting}
       />
-      <KanbanBoard tickets={tickets} grouping={grouping} sorting={sorting} />
+      <KanbanBoard tickets={tickets} grouping={grouping} sorting={sorting} users={userData} />
     </div>
   );
 };
